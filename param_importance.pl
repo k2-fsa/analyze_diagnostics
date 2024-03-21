@@ -69,9 +69,6 @@ while (my ($k, $v) = each %value_rms) {
   if (! $g) { $g = 0.0; }
   $importance{$k} = $v * $g * $num_params;
 
-  if ($k eq "encoder.encoders.3.encoder.layers.0.feed_forward2.out_proj.weight") {
-
-  }
 }
 
 

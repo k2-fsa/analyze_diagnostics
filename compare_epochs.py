@@ -20,22 +20,29 @@ import sys
 if __name__ == "__main__":
     argv = sys.argv
     assert len(argv) == 3
-    model_dir = argv[1]
-    epoch = int(argv[2])
-
-    a = torch.load(f"{model_dir}/epoch-{epoch}.pt", map_location='cpu')
     try:
-        b = torch.load(f"{model_dir}/epoch-{epoch+1}.pt", map_location='cpu')
+        model_dir = argv[1]
+        epoch = int(argv[2])
+        first_epoch = f"{model_dir}/epoch-{epoch}.pt"
+        second_epoch = f"{model_dir}/epoch-{epoch+1}.pt"
+    except ValueError:
+        first_epoch = argv[1]
+        second_epoch = argv[2]
+
+
+    a = torch.load(first_epoch, map_location='cpu')
+    try:
+        b = torch.load(second_epoch, map_location='cpu')
     except:
-        print(f"Model {model_dir}/epoch-{epoch+1}.pt does not exist, comparing previous one with itself")
+        print(f"Model {second_epoch} does not exist, comparing previous one with itself")
         b = a
 
     try:
         f = open(f"{model_dir}/analyze_epoch{epoch}.txt", "w")
     except:
-        f = open(f"/dev/null", "w")
+        f = open(f"/dev/null", "w")  # we also write to stdout.
 
-    s = f"Output of: {argv[0]} {model_dir} {epoch}"
+    s = f"Output of: {' '.join(argv)}"
     print(s)
     print(s, file=f)
 
